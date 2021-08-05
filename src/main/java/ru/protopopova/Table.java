@@ -1,5 +1,9 @@
 package ru.protopopova;
 
+/**
+ * A tabletop, of dimensions 5 units x 5 units
+ * A toy robot moves on a tabletop
+ */
 public class Table {
 
     private final int height;

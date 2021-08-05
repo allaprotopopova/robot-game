@@ -1,19 +1,81 @@
 package ru.protopopova;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.io.*;
 
-public class MainTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    private final PrintStream standardInput = System.out;
+class MainTest {
+
+    InputStream sysInBackup = System.in;
+    private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
-    @Test
-    public void test() {
+    @BeforeEach
+    void setUp() {
+        System.setOut(new PrintStream(outputStreamCaptor));
+    }
 
-        Table table = new Table();
-        Robot robot = new Robot(table);
+    @AfterEach
+    void tearDown() {
+        System.setIn(sysInBackup);
+        System.setOut(standardOut);
+    }
+
+    @Test
+    void exitProgram() throws IOException {
+        input("EXIT");
+        Main.main(new String[0]);
+        assertTrue(true);
+    }
+
+
+    @Test
+    void normalFlow() throws IOException {
+        input("PLACE 1,2,EAST\n" +
+                "REPORT\n" +
+                "MOVE\n" +
+                "MOVE\n" +
+                "LEFT\n" +
+                "MOVE\n" +
+                "REPORT\n" +
+                "EXIT");
+        Main.main(new String[0]);
+        assertEquals("1,2,EAST\r\n" +
+                "3,3,NORTH", outputStreamCaptor.toString().trim());
+    }
+
+    @Test
+    void ignoreCommandsBeforePlace() throws IOException {
+        input("MOVE\n" +
+                "LEFT\n" +
+                "RIGHT\n" +
+                "REPORT\n" +
+        "PLACE 1,1,WEST\n" +
+                "REPORT\n" +
+                "EXIT");
+        Main.main(new String[0]);
+        assertEquals("1,1,WEST", outputStreamCaptor.toString().trim());
+    }
+
+    @Test
+    void preventInvalidPlacing() throws IOException {
+        input("PLACE 4,4,NORTH\n" +
+                "REPORT\n" +
+                "PLACE 6,8,NORTH\n" +
+                "REPORT\n" +
+                "EXIT");
+        Main.main(new String[0]);
+        assertEquals("4,4,NORTH\r\n" +
+                "4,4,NORTH", outputStreamCaptor.toString().trim());
+    }
+
+
+    private void input(String line) {
+        ByteArrayInputStream in = new ByteArrayInputStream(line.getBytes());
+        System.setIn(in);
     }
 }

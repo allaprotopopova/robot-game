@@ -9,7 +9,7 @@ class TableTest {
     @Test
     void initTable() {
         Table table = new Table();
-        assertEquals(5, table.getHeight());
-        assertEquals(5, table.getWidth());
+        assertEquals(4, table.getHeight());
+        assertEquals(4, table.getWidth());
     }
 }

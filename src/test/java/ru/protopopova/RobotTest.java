@@ -87,7 +87,6 @@ class RobotTest {
         robot.doCommand("PLACE 4,4,EAST");
         robot.doCommand("MOVE");
         assertRobotPosition(4, 4, EAST, robot);
-
     }
 
     @Test
@@ -161,12 +160,8 @@ class RobotTest {
         robot.doCommand("PLACE 7,8,WEST");
         assertInitialPosition();
 
-        robot.doCommand("PLACE 4,3,WEST1");
+        robot.doCommand("PLACE 3,2,WEST1");
         assertInitialPosition();
-    }
-
-    private void assertInitialPosition() {
-        assertRobotPosition(-1, -1, NONE, robot);
     }
 
     @Test
@@ -219,5 +214,11 @@ class RobotTest {
         assertEquals(x, robot.getX());
         assertEquals(y, robot.getY());
         assertEquals(head, robot.getHead());
+    }
+
+
+    private void assertInitialPosition() {
+        assertRobotPosition(-1, -1, NONE, robot);
+        assertFalse(robot.isActivated());
     }
 }
