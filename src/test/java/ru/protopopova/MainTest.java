@@ -35,41 +35,44 @@ class MainTest {
 
     @Test
     void normalFlow() throws IOException {
-        input("PLACE 1,2,EAST\n" +
-                "REPORT\n" +
-                "MOVE\n" +
-                "MOVE\n" +
-                "LEFT\n" +
-                "MOVE\n" +
-                "REPORT\n" +
-                "EXIT");
+        input("""
+                PLACE 1,2,EAST
+                REPORT
+                MOVE
+                MOVE
+                LEFT
+                MOVE
+                REPORT
+                EXIT""");
         Main.main(new String[0]);
-        assertEquals("1,2,EAST\r\n" +
+        assertEquals("1,2,EAST\n" +
                 "3,3,NORTH", outputStreamCaptor.toString().trim());
     }
 
     @Test
     void ignoreCommandsBeforePlace() throws IOException {
-        input("MOVE\n" +
-                "LEFT\n" +
-                "RIGHT\n" +
-                "REPORT\n" +
-        "PLACE 1,1,WEST\n" +
-                "REPORT\n" +
-                "EXIT");
+        input("""
+                MOVE
+                LEFT
+                RIGHT
+                REPORT
+                PLACE 1,1,WEST
+                REPORT
+                EXIT""");
         Main.main(new String[0]);
         assertEquals("1,1,WEST", outputStreamCaptor.toString().trim());
     }
 
     @Test
     void preventInvalidPlacing() throws IOException {
-        input("PLACE 4,4,NORTH\n" +
-                "REPORT\n" +
-                "PLACE 6,8,NORTH\n" +
-                "REPORT\n" +
-                "EXIT");
+        input("""
+                PLACE 4,4,NORTH
+                REPORT
+                PLACE 6,8,NORTH
+                REPORT
+                EXIT""");
         Main.main(new String[0]);
-        assertEquals("4,4,NORTH\r\n" +
+        assertEquals("4,4,NORTH\n" +
                 "4,4,NORTH", outputStreamCaptor.toString().trim());
     }
 
